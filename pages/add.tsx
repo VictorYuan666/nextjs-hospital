@@ -4,6 +4,7 @@ import axios from "axios";
 import Router, { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 import { GetServerSideProps } from "next/types";
+import { useSetState } from "ahooks";
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
 
@@ -16,6 +17,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 export default function Registration() {
   const [form] = Form.useForm();
   const router = useRouter();
+  const [state, setState] = useSetState({ loading: false });
   const onFinish = async (values: any) => {
     console.log("Success:", values);
     const {
@@ -39,6 +41,7 @@ export default function Registration() {
     };
 
     console.log(params);
+    setState({ loading: true });
     axios.post("/api/registration", params).then((res) => {
       router.push("/view");
     });
@@ -171,7 +174,7 @@ export default function Registration() {
           <DatePicker />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={state.loading}>
             Submit
           </Button>
         </Form.Item>

@@ -15,7 +15,7 @@ const Main = ({ children }) => {
     const { key } = e;
     if (key === "signOut") {
       signOut();
-    } else if (key === "signIn") {
+    } else if (key === "login") {
       router.push("/api/auth/signin");
     }
   };
@@ -36,7 +36,7 @@ const Main = ({ children }) => {
             overlay={
               <Menu onClick={handleClick}>
                 {!session ? (
-                  <Menu.Item key="signIn">signIn</Menu.Item>
+                  <Menu.Item key="login">login</Menu.Item>
                 ) : (
                   <>
                     <Menu.Item key="username">{session?.user?.name}</Menu.Item>

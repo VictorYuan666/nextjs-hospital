@@ -41,7 +41,7 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className="min-h-screen flex justify-center items-center">
       <Head>
         <title>hospital</title>
         <meta name="description" content="hospital" />
