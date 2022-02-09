@@ -25,17 +25,30 @@ interface IListData {
   list: IRegistration[];
   current: number;
   pageSize: number;
+  total: number;
 }
 
-async function service(data) {
+async function service(current = 1) {
   return axios.get("/api/registration", {
-    params: { current: 1, pageSize: 10 },
+    params: { current, pageSize: 10 },
   });
 }
 
 const View: NextPage = () => {
-  const { data, loading } = useRequest(service);
+  const { data, run, loading } = useRequest(service);
   const listData: IListData = data?.data;
+  // const { pageSize = 10, current = 1, total = 0 } = listData;
+  const paginationProps = {
+    showSizeChanger: false,
+    showQuickJumper: false,
+    pageSize: listData?.pageSize || 10,
+    current: listData?.current || 1,
+    total: listData?.total || 0,
+    onChange: (current) => {
+      console.log(current);
+      run(current);
+    },
+  };
 
   const columns = [
     {
@@ -80,6 +93,7 @@ const View: NextPage = () => {
         columns={columns}
         loading={loading}
         rowKey="id"
+        pagination={paginationProps}
       />
     </div>
   );

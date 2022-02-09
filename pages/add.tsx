@@ -89,8 +89,8 @@ export default function Registration() {
       message.error("not jpg or png file");
       return false;
     }
-    const isLt2M = file.size / 1024 / 1024 < 1;
-    if (!isLt2M) {
+    const isLimit = file.size / 1024 / 1024 < 1;
+    if (!isLimit) {
       message.error("file must smaller than 1MB!");
       setTimeout(() => {
         form.setFieldsValue({
@@ -100,7 +100,7 @@ export default function Registration() {
 
       return false;
     }
-    return isJpgOrPng && isLt2M;
+    return isJpgOrPng && isLimit;
   }
 
   const formItemLayout = {
@@ -110,7 +110,7 @@ export default function Registration() {
     },
     wrapperCol: {
       xs: { span: 12 },
-      sm: { span: 6 },
+      sm: { span: 8 },
     },
   };
   return (
@@ -192,6 +192,7 @@ export default function Registration() {
           >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
+          <span className="">file size must smaller than 500kb</span>
         </Form.Item>
         <Form.Item
           label="appointment time"

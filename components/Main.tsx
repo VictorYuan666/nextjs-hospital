@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Button, Layout, Menu, Dropdown } from "antd";
+import { Avatar, Layout, Menu, Dropdown } from "antd";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { UserOutlined } from "@ant-design/icons";
@@ -23,15 +23,12 @@ const Main = ({ children }) => {
     <Layout>
       <Header className="flex justify-between">
         <Link href="/">
-          <span className="text-white text-bold text-2xl leading-[inherit]">
+          <span className="text-white text-bold text-2xl leading-[inherit] cursor-pointer">
             Hospital
           </span>
         </Link>
 
         <div className="">
-          {/* <Button type="link" block>
-            Login
-          </Button> */}
           <Dropdown
             overlay={
               <Menu onClick={handleClick}>
@@ -40,7 +37,7 @@ const Main = ({ children }) => {
                 ) : (
                   <>
                     <Menu.Item key="username">{session?.user?.name}</Menu.Item>
-                    <Menu.Item key="signOut">signOut</Menu.Item>
+                    <Menu.Item key="signOut">exit</Menu.Item>
                   </>
                 )}
               </Menu>

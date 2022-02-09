@@ -1,4 +1,4 @@
-import { Button, Card } from "antd";
+import { Button, Card, Spin } from "antd";
 import type { GetServerSideProps } from "next";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/dist/client/router";
@@ -21,8 +21,9 @@ import { EditOutlined, SolutionOutlined } from "@ant-design/icons";
 //   };
 // };
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+  console.log("status", status);
 
   console.log("session", session);
   const onPatientClick = () => {
@@ -47,35 +48,44 @@ export default function Home() {
         <meta name="description" content="hospital" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="">
-        {!session ? (
-          <div className="flex flex-col">
-            <Button type="primary" onClick={goSignIn}>
-              login
-            </Button>
-            <Button className="mt-4" onClick={goSignUp}>
-              signup
-            </Button>
-          </div>
-        ) : (
-          <Card
-            hoverable
-            style={{ width: 240 }}
-            actions={[
-              <EditOutlined key="add" onClick={onPatientClick} />,
-              <SolutionOutlined key="view" onClick={onDoctorClick} />,
-            ]}
-            cover={
-              <img
-                alt="example"
-                src="https://img1.baidu.com/it/u=4171233716,2174339849&fm=253&fmt=auto&app=138&f=JPG?w=448&h=280"
-              />
-            }
-          >
-            <Card.Meta title="patient registration" />
-          </Card>
-        )}
-      </main>
+      <Spin spinning={status === "loading"}>
+        <main className="">
+          {!session ? (
+            <div className="flex flex-col">
+              <Button type="primary" onClick={goSignIn}>
+                login
+              </Button>
+              <Button className="mt-4" onClick={goSignUp}>
+                signup
+              </Button>
+            </div>
+          ) : (
+            <Card
+              style={{ width: 240 }}
+              actions={[
+                <EditOutlined
+                  key="add"
+                  onClick={onPatientClick}
+                  className="add"
+                />,
+                <SolutionOutlined
+                  key="view"
+                  onClick={onDoctorClick}
+                  className="viewAction"
+                />,
+              ]}
+              cover={
+                <img
+                  alt="example"
+                  src="https://img1.baidu.com/it/u=4171233716,2174339849&fm=253&fmt=auto&app=138&f=JPG?w=448&h=280"
+                />
+              }
+            >
+              <Card.Meta title="patient registration" />
+            </Card>
+          )}
+        </main>
+      </Spin>
     </div>
   );
 }
