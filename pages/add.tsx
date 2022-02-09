@@ -1,4 +1,12 @@
-import { Form, Input, Button, Checkbox, DatePicker, Upload } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  DatePicker,
+  Upload,
+  message,
+} from "antd";
 import { UploadOutlined, InboxOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Router, { useRouter } from "next/router";
@@ -61,6 +69,7 @@ export default function Registration() {
       form.setFieldsValue({
         driverLicense: [{ url: base64Img, name: option.file.name }],
       });
+      console.log("@@@@", e.target);
       if (e && e.target && e.target.result) {
         option.onSuccess();
       }
@@ -74,6 +83,25 @@ export default function Registration() {
     }
     return e && e.fileList;
   };
+  function beforeUpload(file) {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      message.error("not jpg or png file");
+      return false;
+    }
+    const isLt2M = file.size / 1024 / 1024 < 1;
+    if (!isLt2M) {
+      message.error("file must smaller than 1MB!");
+      setTimeout(() => {
+        form.setFieldsValue({
+          driverLicense: null,
+        });
+      }, 0);
+
+      return false;
+    }
+    return isJpgOrPng && isLt2M;
+  }
 
   const formItemLayout = {
     labelCol: {
@@ -158,6 +186,7 @@ export default function Registration() {
           <Upload
             listType="picture"
             customRequest={customRequest}
+            beforeUpload={beforeUpload}
             maxCount={1}
             multiple={false}
           >
