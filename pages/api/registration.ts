@@ -1,4 +1,5 @@
 import { getSession } from "next-auth/react";
+import prisma from "../../lib/prisma";
 
 export default async function handler(req, res) {
   let { current = 1, pageSize = 10 } = req.query;
